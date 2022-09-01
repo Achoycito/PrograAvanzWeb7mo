@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testeo Vue</title>
+    <!-- Enlazar Vue.js -->
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="contenedor">
+        <h1>
+            Club de Damas
+        </h1>
+        <ol>
+            <li v-for="item in reales">
+                {{item.nombre}} - {{item.rango}}
+            </li>
+        </ol>
+        <input type="text" v-model="nombre">Nombre</input><br>
+        <input type="text" v-model="rango">Rango</input><br>
+        <button @click="agregarMiembro">Agregar</button>
+
+        <hr>
+        <h1>
+            {{res}}
+        </h1>
+        <input type="text" v-model="num1">Numero 1</input><br>
+        <input type="text" v-model="num2">Numero 2</input><br>
+        <button @click="sumar">Sumar</button>
+        
+        <hr>
+        
+        
+        <input type="text" v-model="edad">Tu edad</input>
+        <h1 v-if="edad>=18">
+            Bienvenido a la Escupidera de Salty, ¿qué tan rudo eres?
+        </h1>
+        <h1 v-if="edad<18">
+            Tendrás que ir a la Choza de los Pequeñines
+        </h1>
+    </div>
+
+    <script type="text/javascript">
+        const {createApp} = Vue
+
+        const app = createApp({
+            data(){
+                return{
+                    num1:0,
+                    num2:0,
+                    res:0,
+                    edad:0,
+                    reales:[{nombre:"Alan", rango:"Rector"},
+                            {nombre:"Frank", rango:"Director de Finanzas"},
+                            {nombre:"Maruko", rango:"Secretaria"}],
+                    nombre:"",
+                    rango:""
+                }
+            },
+            methods:{
+                sumar(){
+                    this.res = parseInt(this.num1)+parseInt(this.num2);
+                },
+                agregarMiembro(){
+                    this.reales.push({nombre:this.nombre, rango:this.rango});
+                }
+            }
+        }).mount("#contenedor")
+
+
+    </script>
+</body>
+</html>

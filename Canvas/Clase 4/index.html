@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Canvas</title>
+    <style type="text/css">
+        canvas{
+            background-color: rgb(230,230,255);
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvasChido" width="1400" height="880">
+        Tu navegador no soporta Canvas pero aquí hay un Canvas bonito
+    </canvas>
+
+    <script type="text/javascript">
+        var canvas = null;
+        var ctx = null;
+        var pressed = false;
+        var r, g, b;
+        var player1 = null;
+        var player2 = null;
+        var paredes = [];
+        var score = 0;
+        var velMov = 10;
+        var direccion = "derecha";
+        var pause = false;
+
+        var indiana = new Image();
+        var diamante = new Image();
+        var pickupsound = new Audio();
+        
+        function start(){
+            canvas = document.getElementById("canvasChido");
+            ctx = canvas.getContext("2d");
+
+            player1 = new cuadro(0, 50, 64, 64, "blue");
+            player2 = new cuadro(getRandomInt(1200)+50, getRandomInt(700)+50, 32, 32, "yellow");
+            paredes.push(new cuadro(500,50,500,40, "gray"));
+            paredes.push(new cuadro(1200,200,45,400, "gray"));
+            paredes.push(new cuadro(600,800,450,30, "gray"));
+            paredes.push(new cuadro(100,250,50,500, "gray"));
+
+            indiana.src = "img/player.png";
+            diamante.src = "img/diamond.png";
+            pickupsound.src = "sound/bonk.mp3";
+
+            pintarCuadrado();
+        }
+
+        window.requestAnimationFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 17);
+            };
+        }());
+
+        document.addEventListener("load", start(), false);
+
+        function pintarCuadrado(){
+            window.requestAnimationFrame(pintarCuadrado);
+            ctx.fillStyle = "rgb(230,230,255)";
+            ctx.fillRect(0, 0, 10000,10000);
+
+            ctx.font = "30px Calibri";
+            ctx.fillStyle = "rgba(255,60,0,1)";
+            ctx.fillText("Puntuación: "+score, 10, 30);
+            // player1.pintar(ctx);
+            ctx.drawImage(indiana, player1.x, player1.y);
+            // player2.pintar(ctx);
+            ctx.drawImage(diamante, player2.x, player2.y);
+            for (let i = 0; i < paredes.length; i++) {
+                paredes[i].pintar(ctx);
+            }
+            if(pause){
+                ctx.fillStyle = "rgba(0,0,0,0.5)";
+                ctx.fillRect(0,0,2000,2000);
+
+                ctx.fillStyle = "white";
+                ctx.fillText("P A U S A", 10,400);
+            }
+            else{
+                update();
+            }
+            
+        }
+
+        function update(){
+            switch (direccion) {
+                case "derecha":
+                    player1.x+=velMov;
+                    if(player1.x>=1400){
+                        player1.x=-45;
+                    }
+                    break;
+                case "izquierda":
+                    player1.x-=velMov;
+                    if(player1.x<=-45){
+                        player1.x=1400;
+                    }
+                    break;
+                case "arriba":
+                    player1.y-=velMov;
+                    if(player1.y<=-45){
+                        player1.y=865;
+                    }
+                    break;
+                case "abajo":
+                    player1.y+=velMov;
+                    if(player1.y>=865){
+                        player1.y=-45;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (player1.se_tocan(player2)) {
+                player2.x = getRandomInt(1200)+50;
+                player2.y = getRandomInt(700)+50;
+                score+=5;
+                velMov+=2;
+                pickupsound.play();
+            }
+            for (let i = 0; i < paredes.length; i++) {
+                if(player1.se_tocan(paredes[i])){
+                    switch (direccion) {
+                        case "derecha":
+                            player1.x-=velMov;
+                            break;
+                        case "izquierda":
+                            player1.x+=velMov;
+                            break;
+                        case "arriba":
+                            player1.y+=velMov;
+                            break;
+                        case "abajo":
+                            player1.y-=velMov;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        function cuadro(x,y,w,h,c){
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.c = c;
+
+            this.se_tocan = function (target) { 
+                if(this.x < target.x + target.w &&
+                this.x + this.w > target.x && 
+                this.y < target.y + target.h && 
+                this.y + this.h > target.y){
+                    return true;
+                    console.log("Llamado de emergencia nueve uno uno")
+                }
+            };
+
+            this.pintar = function(ctx){
+                ctx.fillStyle = this.c;
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+                ctx.strokeRect(this.x, this.y, this.w, this.h);
+            }
+        }
+
+        document.addEventListener("keydown", function(e){
+            console.log(e.key);
+            if(e.key == "w" || e.key =="ArrowUp"){
+                // ultraY-=15;
+                direccion = "arriba";
+            }
+            if(e.key == "s" || e.key =="ArrowDown"){
+                // ultraY+=15;
+                direccion = "abajo";
+            }
+            if(e.key == "a" || e.key =="ArrowLeft"){
+                // ultraX-=15;
+                direccion = "izquierda";
+            }
+            if(e.key == "d" || e.key =="ArrowRight"){
+                // ultraX+=15;
+                direccion = "derecha";
+            }
+            if(e.key == " "){
+                pause = (pause) ? false : true;
+            }
+        });
+
+        function getRandomInt(limite){
+            return Math.floor(Math.random() * limite);
+        }
+        
+        // canvas.addEventListener("mouseover", function(e){
+        //     generateRandomColor();
+        // })
+        
+        // canvas.addEventListener("mousedown", function(e){
+        //     pressed = true;
+        // });
+
+        function generateRandomColor() {
+            r = Math.floor(Math.random() * 256);
+            g = Math.floor(Math.random() * 256);
+            b = Math.floor(Math.random() * 256);
+        }
+
+        
+
+</script>
+</body>
+</html>

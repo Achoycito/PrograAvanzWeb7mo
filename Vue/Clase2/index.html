@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testeo Vue</title>
+    <!-- Enlazar Vue.js -->
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="contenedor">
+        <form>
+            <fieldset>
+                <legend>
+                    Acceso al panel
+                </legend>
+                <label>
+                    Correo electronico
+                </label>
+                <input type="email" v-model="email">
+                <label>
+                    Contraseña
+                </label>
+                <input type="password" v-model="password">
+                <button @click="login">Acceder</button>
+                
+            </fieldset>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        const {createApp} = Vue;
+        const data = null;
+        const error = null;
+        
+        const app = createApp({
+            data(){
+                return{
+                    users:null,
+                    email:"",
+                    password:"",
+                    mensaje:""
+                }
+            },
+            methods:{
+                login(e){
+                    e.preventDefault();
+                    var logeado=false;
+                    var emailTemp = this.email;
+                    var passwordTemp = this.password;
+
+                    var access = this.users.map(function(u){
+                        console.log(emailTemp);
+                        if(emailTemp.toLowerCase() === u.email.toLowerCase()){
+                            if(passwordTemp === u.password){
+                                logeado=true;
+                            }
+                        }
+                    })
+                    if(logeado){
+                        alert("Has iniciado sesión correctamente");
+                    }else{
+                        alert("Inicio de sesión fallido");
+                    }
+                }
+            },
+            mounted(){
+                fetch("users.json")
+                .then((res)=>res.json())
+                .then((json)=>(this.users = json))
+                .catch((err)=>(console.log(err)));
+
+            }
+        }).mount("#contenedor")
+
+
+    </script>
+</body>
+</html>

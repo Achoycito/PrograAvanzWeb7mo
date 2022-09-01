@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Canvas</title>
+    <style type="text/css">
+        canvas{
+            background-color: rgb(230,230,255);
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvasChido" width="1400" height="880">
+        Tu navegador no soporta Canvas pero aquí hay un Canvas bonito
+    </canvas>
+
+    <img id="imagen" src="jelkichen.jpg" style="display:none">
+
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvasChido");
+        var ctx = canvas.getContext("2d");
+        var pressed = false;
+        var r, g, b;
+        var ultraX = 0, ultraY = 0;
+        ctx.fillRect(ultraX, ultraY, 70,70);
+        // generateRandomColor();
+        var fig = "arc";
+
+        ctx.strokeStyle = "black";
+        
+        document.addEventListener("keydown", function(e){
+            console.log(e);
+            if(e.key == "w" || e.key =="ArrowUp"){
+                ultraY-=10;
+            }
+            if(e.key == "s" || e.key =="ArrowDown"){
+                ultraY+=10;
+            }
+            if(e.key == "a" || e.key =="ArrowLeft"){
+                ultraX-=10;
+            }
+            if(e.key == "d" || e.key =="ArrowRight"){
+                ultraX+=10;
+            }
+            pintarCuadrado();
+        });
+        
+        function pintarCuadrado(){
+            ctx.fillStyle = "rgb(230,230,255)";
+            ctx.fillRect(0, 0, 1000,1000);
+
+            ctx.fillStyle = "rgba(255,30,30,0.8)";
+            ctx.fillRect(ultraX, ultraY, 70,70);
+        }
+        
+        // canvas.addEventListener("click", function(e){
+            // ctx.fillStyle = "rgba("+r+","+g+","+b+",0.5)";
+        //     ctx.beginPath();
+        //     if(fig=="arc"){
+        //         ctx.arc(e.offsetX, e.offsetY, 75, 0, 2*Math.PI);
+        //         ctx.stroke();
+        //     }else{
+        //         ctx.fillRect(e.offsetX-75, e.offsetY-75, 150,150);
+        //         ctx.strokeRect(e.offsetX-75, e.offsetY-75, 150,150);
+        //     }
+        //     ctx.fill();
+        // });
+        // canvas.addEventListener("mouseover", function(e){
+        //     generateRandomColor();
+        // })
+        // canvas.addEventListener("mouseout", function(e){
+        //     fig = (fig=="arc") ? "rect" : "arc";
+        // });
+        // canvas.addEventListener("mousemove", function(e){
+        //     if(pressed){
+        //         ctx.fillStyle = "black";
+        //         ctx.fillRect(e.offsetX-5, e.offsetY-5, 10,10);
+        //     }
+        // });
+        // canvas.addEventListener("mouseup", function(e){
+        //     pressed = false;
+        // });
+        // canvas.addEventListener("mousedown", function(e){
+        //     pressed = true;
+        // });
+
+        // function generateRandomColor() {
+        //     r = Math.floor(Math.random() * 256);
+        //     g = Math.floor(Math.random() * 256);
+        //     b = Math.floor(Math.random() * 256);
+        // }
+
+        //Imagen
+        // var img = document.getElementById("imagen");
+        // ctx.drawImage(img,50,50, 400,400);
+
+
+        //Texto relleno y contorno
+        // ctx.font = "30px Calibri";
+        // ctx.fillStyle = "rgba(255,60,0,1)";
+        // ctx.fillText("Bienvenido humano", 50, 50);
+        // ctx.strokeStyle = "rgba(10,150,10,1)";
+        // ctx.strokeText("Tome una galleta (acepte las cookies o formateamos el equipo)", 50, 100);
+
+        //Gradiente lineal
+        // var grd = ctx.createLinearGradient(40,200,300,300);
+        // grd.addColorStop(0, "blue");
+        // grd.addColorStop(1, "green");
+        // ctx.fillStyle = grd;
+        // ctx.fillRect(50,50,400,400);
+        
+        
+        //Gradiente radial
+        // var radialGrd = ctx.createRadialGradient(110,90, 30, 100,100,70);
+        // radialGrd.addColorStop(0,"yellow");
+        // radialGrd.addColorStop(0.9, "white");
+        // radialGrd.addColorStop(1, "red");
+        // ctx.fillStyle = radialGrd;
+        // ctx.fillRect(20,20,160,160);
+        
+        //Rectangulos
+        // ctx.fillStyle = "rgba(255,0,70,1)";
+        // ctx.fillRect(25,25,175,175);
+        // ctx.fillStyle = "rgba(70, 255, 70, 1)";
+        // ctx.fillRect(175,175,175,175);
+        // ctx.fillStyle = "rgba(70, 70, 255, 0.5)";
+        // ctx.fillRect(325,325,175,175);
+        
+        //Triangulos y lineas
+        // ctx.moveTo(25,25);
+        // ctx.lineTo(25,250);
+        // ctx.stroke();
+        // ctx.fillStyle = "rgba(255,10,230,1)";
+        // ctx.moveTo(120,75);
+        // ctx.lineTo(95,175);
+        // ctx.lineTo(320,165);
+        // ctx.lineTo(120,75);
+        // ctx.fill();
+        // ctx.moveTo(50,200);
+        // ctx.lineTo(320,75);
+        // ctx.stroke();
+        
+        //Circulos
+        // ctx.beginPath();
+        // ctx.arc(200,200, 100, 0, 2*Math.PI);
+        // ctx.strokeStyle = "rgba(255,0,0,1)";
+        // ctx.stroke();
+        // ctx.beginPath();
+        // ctx.arc(500,200, 100, 0, 2*Math.PI);
+        // ctx.fillStyle = "rgba(255,180,180,1)";
+        // ctx.fill();
+        
+        </script>
+</body>
+</html>
