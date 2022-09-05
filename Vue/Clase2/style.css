@@ -1,0 +1,78 @@
+body{
+    color: white;
+    background-color: #225;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.container-login{
+    width: 500px;
+    margin: 50px auto;
+    align-items: center;
+}
+.titulo-login{
+    font-size: 40px;
+    text-align: center;
+    margin: 10px;
+}
+.container-login form{
+    margin: 10px;
+    padding: 8px;
+}
+.container-login legend{
+    font-size: 20px;
+    padding: 5px;
+}
+.container-login input{
+    width: 400px;
+}
+.container-login button{
+    cursor: pointer;
+    margin-top: 20px;
+    padding: 15px 20px;
+    color: white;
+    background-color: rgb(159, 34, 193);
+    border: none;
+    border-radius: 5px;
+}
+.container-login input, button{
+    font-size: 18px;
+    padding: 10px;
+    margin: 6px;
+}
+
+.container-dashboard{
+    margin: 10px auto;
+    align-items: center;
+}
+.titulo-nombre{
+    margin: 20px;
+    font-size: 18px;
+}
+.btn-logout{
+    cursor: pointer;
+    padding: 5px 10px;
+    color: white;
+    background-color: #d30;
+    border: none;
+    border-radius: 5px;
+}
+.titulo-tabla{
+    margin: 20px;
+    font-size: 30px;
+}
+.tabla-usuarios{
+    font-size: 20px;
+    margin: 20px;
+}
+.tabla-usuarios th, td{
+    border: 3px solid black;
+    padding: 5px 10px;
+    margin: 10px;
+}
+.tabla-usuarios th{
+    background-color: blueviolet;
+    padding: 10px;
+}
+.tabla-usuarios td{
+    background-color: #aaf;
+    color: black;
+}

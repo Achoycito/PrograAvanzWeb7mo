@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="contenedor" class="container-dashboard">
+        <span class="titulo-nombre">Bienvenido(a) <b>{{usernameActual}}</b></span>
+        <a href="index.html">
+            <button class="btn-logout">SALIR</button>
+        </a>
+        <hr>
+        <h1 class="titulo-tabla"> Lista de usuarios registrados </h1>
+        <table class="tabla-usuarios">
+            <tr>
+                <th>ID</th>
+                <th>Nombre de usuario</th>
+                <th>Nombre</th>
+                <th>Correo electronico</th>
+                <th>Numero de telefono</th>
+                <th>Sitio web</th>
+            </tr>
+            <!-- Por cada usuario en jsonUsuarios se imprime una fila con sus datos -->
+            <tr v-for="user in jsonUsuarios">
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.website}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        const {createApp} = Vue;
+        var miStorage = window.localStorage;
+        // document.getElementById("nombre-usuario").innerHTML = "Bienvenido "+miStorage.getItem("username");
+        const data = null;
+        const error = null;
+        
+        const app = createApp({
+            data(){
+                return{
+                    jsonUsuarios: null,
+                    usernameActual: localStorage.getItem("username")
+                }
+            },
+            mounted(){
+                fetch("users.json")
+                .then((res)=>res.json())
+                .then((json)=>(this.jsonUsuarios = json))
+                .catch((err)=>(console.log(err)));
+            }
+        }).mount("#contenedor")
+
+
+    </script>
+</body>
+
+
+</html>

@@ -4,33 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testeo Vue</title>
+    <title>Vue - Inicio de sesion</title>
     <!-- Enlazar Vue.js -->
     <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="contenedor">
+    <div id="contenedor" class="container-login">
+        <h1 class="titulo-login">Dashboard</h1>
         <form>
             <fieldset>
                 <legend>
-                    Acceso al panel
+                    Inicio de sesion
                 </legend>
-                <label>
-                    Correo electronico
-                </label>
-                <input type="email" v-model="email">
-                <label>
-                    Contraseña
-                </label>
-                <input type="password" v-model="password">
-                <button @click="login">Acceder</button>
-                
+                <input type="email" placeholder="Correo electronico" v-model="email">
+                <br>
+                <input type="password" placeholder="Contraseña" v-model="password">
+                <br>
+                <button @click="login">ACCEDER</button>
             </fieldset>
         </form>
     </div>
 
     <script type="text/javascript">
         const {createApp} = Vue;
+        var miStorage = window.localStorage;
         const data = null;
         const error = null;
         
@@ -49,17 +47,23 @@
                     var logeado=false;
                     var emailTemp = this.email;
                     var passwordTemp = this.password;
-
+                    var usernameLogeado;
+                    var emailLogeado;
+                    
                     var access = this.users.map(function(u){
                         console.log(emailTemp);
                         if(emailTemp.toLowerCase() === u.email.toLowerCase()){
                             if(passwordTemp === u.password){
+                                usernameLogeado = u.username;
+                                emailLogeado = u.email;
                                 logeado=true;
                             }
                         }
                     })
                     if(logeado){
-                        alert("Has iniciado sesión correctamente");
+                        localStorage.setItem("username", usernameLogeado);
+                        localStorage.setItem("email", emailLogeado);
+                        window.location.href = "dashboard.html";
                     }else{
                         alert("Inicio de sesión fallido");
                     }
