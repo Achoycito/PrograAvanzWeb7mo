@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard de usuarios</title>
 
     <script src="https://unpkg.com/vue@3"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="contenedor" class="container-dashboard">
-        <span class="titulo-nombre">Bienvenido(a) <b>{{usernameActual}}</b></span>
+        <span class="titulo-nombre">Bienvenido(a) <b>{{nameActual}}</b></span>
         <a href="index.html">
             <button class="btn-logout">SALIR</button>
         </a>
@@ -41,7 +41,6 @@
     <script type="text/javascript">
         const {createApp} = Vue;
         var miStorage = window.localStorage;
-        // document.getElementById("nombre-usuario").innerHTML = "Bienvenido "+miStorage.getItem("username");
         const data = null;
         const error = null;
         
@@ -49,6 +48,7 @@
             data(){
                 return{
                     jsonUsuarios: null,
+                    nameActual: localStorage.getItem("name"),
                     usernameActual: localStorage.getItem("username")
                 }
             },

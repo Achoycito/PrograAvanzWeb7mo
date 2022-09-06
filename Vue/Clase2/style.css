@@ -23,6 +23,8 @@ body{
 }
 .container-login input{
     width: 400px;
+    border: 2px solid rgb(159, 34, 193);
+    border-radius: 5px;
 }
 .container-login button{
     cursor: pointer;

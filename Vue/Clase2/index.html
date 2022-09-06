@@ -47,6 +47,7 @@
                     var logeado=false;
                     var emailTemp = this.email;
                     var passwordTemp = this.password;
+                    var nameLogeado;
                     var usernameLogeado;
                     var emailLogeado;
                     
@@ -54,13 +55,15 @@
                         console.log(emailTemp);
                         if(emailTemp.toLowerCase() === u.email.toLowerCase()){
                             if(passwordTemp === u.password){
+                                nameLogeado = u.name;
                                 usernameLogeado = u.username;
                                 emailLogeado = u.email;
-                                logeado=true;
+                                logeado = true;
                             }
                         }
                     })
                     if(logeado){
+                        localStorage.setItem("name", nameLogeado);
                         localStorage.setItem("username", usernameLogeado);
                         localStorage.setItem("email", emailLogeado);
                         window.location.href = "dashboard.html";
