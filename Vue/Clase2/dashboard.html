@@ -10,32 +10,66 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="contenedor" class="container-dashboard">
         <span class="titulo-nombre">Bienvenido(a) <b>{{nameActual}}</b></span>
         <a href="index.html">
-            <button class="btn-logout">SALIR</button>
+            <button class="btncito btn-red">SALIR</button>
         </a>
+        <span>{{f_id}}</span>
         <hr>
-        <h1 class="titulo-tabla"> Lista de usuarios registrados </h1>
-        <table class="tabla-usuarios">
-            <tr>
-                <th>ID</th>
-                <th>Nombre de usuario</th>
-                <th>Nombre</th>
-                <th>Correo electronico</th>
-                <th>Numero de telefono</th>
-                <th>Sitio web</th>
-            </tr>
-            <!-- Por cada usuario en jsonUsuarios se imprime una fila con sus datos -->
-            <tr v-for="user in jsonUsuarios">
-                <td>{{user.id}}</td>
-                <td>{{user.username}}</td>
-                <td>{{user.name}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.phone}}</td>
-                <td>{{user.website}}</td>
-            </tr>
-        </table>
+        <div v-if="(show=='table')">
+
+            <h1 class="titulo-tabla"> Lista de usuarios registrados </h1>
+            <button @click="hacer('agregar',null)" class="btncito btn-green">AGREGAR</button>
+            <table class="tabla-usuarios">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre de usuario</th>
+                    <th>Nombre</th>
+                    <th>Correo electronico</th>
+                    <th>Numero de telefono</th>
+                    <th>Sitio web</th>
+                    <th></th>
+                </tr>
+                <!-- Por cada usuario en jsonUsuarios se imprime una fila con sus datos -->
+                <tr v-for="user in jsonUsuarios">
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.website}}</td>
+                    <td>
+                        <button @click="hacer('editar', user)" class="btncito btn-orange">EDITAR</button>
+                        <button class="btncito btn-red">ELIMINAR</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div v-else-if="(show=='form')">
+            <h1 v-if="action=='agregar'" class="titulo-tabla">Agregar usuario nuevo</h1>
+            <h1 v-else-if="action=='editar'" class="titulo-tabla">Editar usuario existente</h1>
+            <label class="form-usuarios">Nombre</label>
+            <input type="text" v-model="f_nombre" class="form-usuarios">
+            
+            <label class="form-usuarios">Nombre de usuario</label>
+            <input type="text" v-model="f_username" class="form-usuarios">
+            
+            <label class="form-usuarios">Correo electronico</label>
+            <input type="email" v-model="f_email" class="form-usuarios">
+            
+            <label class="form-usuarios">Telefono</label>
+            <input type="tel" v-model="f_telefono" class="form-usuarios">
+            
+            <label class="form-usuarios">Sitio web</label>
+            <input type="text" v-model="f_sitioweb" class="form-usuarios">
+            
+            <br>
+            <button @click="guardar" class="btncito btn-green">GUARDAR</button>
+            <button @click="goToTable" class="btncito btn-gray">CANCELAR</button>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -49,9 +83,89 @@
                 return{
                     jsonUsuarios: null,
                     nameActual: localStorage.getItem("name"),
-                    usernameActual: localStorage.getItem("username")
+                    show: "table", //Dice si se va a estar mostrando la tabla o el formulario
+                    action: "", //Dice si se va a agregar o editar
+                    f_id: 0,
+                    f_nombre: null,
+                    f_username: null,
+                    f_email: null,
+                    f_telefono: null,
+                    f_sitioweb: null
                 }
             },
+            methods:{
+                hacer(act, user){
+                    this.action = act;
+                    this.show = "form";
+                    if(this.action == "agregar"){
+                        console.log("Agregar usuario");
+                        //Posiblemente agarrar el ID más alto y sumarle 1 para ponerlo al nuevo usuario
+                    }
+                    else{
+                        this.f_id = user.id;
+                        this.f_nombre = user.name;
+                        this.f_username = user.username;
+                        this.f_email = user.email;
+                        this.f_telefono = user.phone;
+                        this.f_sitioweb = user.website;
+                    }
+                },
+
+                guardar(){
+                    if(this.action == "agregar"){
+                        var emailEncontrado = false;
+                        //Busca el email para ver si ya esta registrado
+                        this.jsonUsuarios.forEach(user => {
+                            if(user.id > this.f_id){ //Para buscar el ID mas alto
+                                this.f_id = user.id;
+                            }
+                            if(user.email == this.f_email){
+                                emailEncontrado = true;
+                            }
+                        });
+                        //Si no lo encontro, agrega al usuario
+                        if(!emailEncontrado){
+                            this.jsonUsuarios.push({
+                                id: this.f_id + 1,
+                                name: this.f_nombre,
+                                username: this.f_username, 
+                                email: this.f_email, 
+                                phone: this.f_telefono, 
+                                website: this.f_sitioweb});
+                            this.goToTable();
+                        }
+                        else{
+                            alert("El correo electronico ya esta en uso, introduzca otro");
+                        }
+                    }
+                    else if(this.action == "editar"){
+                        //Busca en el arreglo el ID del que se quiere editar y le actualiza sus datos
+                        this.jsonUsuarios.forEach(user => {
+                            if(user.id == this.f_id){
+                                user.name = this.f_nombre;
+                                user.username = this.f_username;
+                                user.email = this.f_email;
+                                user.phone = this.f_telefono;
+                                user.website = this.f_sitioweb;
+                            }
+                        });
+                        this.goToTable();
+                    }
+                },
+                
+                goToTable(){ //Reinicia todo
+                    this.f_id = 0;
+                    this.action = "";
+                    this.f_nombre = null;
+                    this.f_username = null;
+                    this.f_email =null;
+                    this.f_telefono = null;
+                    this.f_sitioweb = null;
+                    this.show = "table";
+                }
+
+            },
+
             mounted(){
                 fetch("users.json")
                 .then((res)=>res.json())

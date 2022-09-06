@@ -41,29 +41,51 @@ body{
     margin: 6px;
 }
 
+
+.form-usuarios{
+    display: block;
+    width: 400px;
+    margin: 10px 0px;
+    font-size: 20px;
+}
+
+
+
 .container-dashboard{
     margin: 10px auto;
     align-items: center;
+    padding: 15px;
 }
 .titulo-nombre{
-    margin: 20px;
+    margin: 20px 0px;
     font-size: 18px;
 }
-.btn-logout{
+.btncito{
     cursor: pointer;
     padding: 5px 10px;
     color: white;
-    background-color: #d30;
     border: none;
     border-radius: 5px;
 }
+.btn-red{
+    background-color: #d30;
+}
+.btn-green{
+    background-color: #0a0;
+}
+.btn-orange{
+    background-color: #f70;
+}
+.btn-gray{
+    background-color: #666;
+}
 .titulo-tabla{
-    margin: 20px;
+    margin: 20px 0px;
     font-size: 30px;
 }
 .tabla-usuarios{
     font-size: 20px;
-    margin: 20px;
+    margin: 20px 0px;
 }
 .tabla-usuarios th, td{
     border: 3px solid black;
