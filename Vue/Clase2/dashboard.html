@@ -7,6 +7,7 @@
     <title>Dashboard de usuarios</title>
 
     <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +17,6 @@
         <a href="index.html">
             <button class="btncito btn-red">SALIR</button>
         </a>
-        <span>{{f_id}}</span>
         <hr>
         <div v-if="(show=='table')">
 
@@ -30,7 +30,10 @@
                     <th>Correo electronico</th>
                     <th>Numero de telefono</th>
                     <th>Sitio web</th>
-                    <th></th>
+                    <th>Nombre de compañia</th>
+                    <th>Eslogan</th>
+                    <th>BS</th>
+                    <th class="acciones"></th>
                 </tr>
                 <!-- Por cada usuario en jsonUsuarios se imprime una fila con sus datos -->
                 <tr v-for="user in jsonUsuarios">
@@ -40,9 +43,12 @@
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.website}}</td>
+                    <td>{{user.company.name}}</td>
+                    <td>{{user.company.catchPhrase}}</td>
+                    <td>{{user.company.bs}}</td>
                     <td>
                         <button @click="hacer('editar', user)" class="btncito btn-orange">EDITAR</button>
-                        <button class="btncito btn-red">ELIMINAR</button>
+                        <button @click="remover(user)" class="btncito btn-red">ELIMINAR</button>
                     </td>
                 </tr>
             </table>
@@ -60,12 +66,28 @@
             <label class="form-usuarios">Correo electronico</label>
             <input type="email" v-model="f_email" class="form-usuarios">
             
+            <label class="form-usuarios">Contraseña</label>
+            <input type="password" v-model="f_password" class="form-usuarios">
+
             <label class="form-usuarios">Telefono</label>
             <input type="tel" v-model="f_telefono" class="form-usuarios">
             
             <label class="form-usuarios">Sitio web</label>
             <input type="text" v-model="f_sitioweb" class="form-usuarios">
             
+            <br>
+
+            <label class="form-usuarios">Nombre de la compañia</label>
+            <input type="text" v-model="f_nombreComp" class="form-usuarios">
+            
+            <label class="form-usuarios">Eslogan</label>
+            <input type="text" v-model="f_eslogan" class="form-usuarios">
+            
+            <label class="form-usuarios">BS</label>
+            <input type="text" v-model="f_bs" class="form-usuarios">
+
+
+
             <br>
             <button @click="guardar" class="btncito btn-green">GUARDAR</button>
             <button @click="goToTable" class="btncito btn-gray">CANCELAR</button>
@@ -89,8 +111,12 @@
                     f_nombre: null,
                     f_username: null,
                     f_email: null,
+                    f_password: null,
                     f_telefono: null,
-                    f_sitioweb: null
+                    f_sitioweb: null,
+                    f_nombreComp:null,
+                    f_eslogan:null,
+                    f_bs:null
                 }
             },
             methods:{
@@ -101,42 +127,43 @@
                         console.log("Agregar usuario");
                         //Posiblemente agarrar el ID más alto y sumarle 1 para ponerlo al nuevo usuario
                     }
-                    else{
+                    else if(this.action == "editar"){
                         this.f_id = user.id;
                         this.f_nombre = user.name;
                         this.f_username = user.username;
                         this.f_email = user.email;
+                        this.f_password = user.password;
                         this.f_telefono = user.phone;
                         this.f_sitioweb = user.website;
+                        this.f_nombreComp = user.company.name;
+                        this.f_eslogan = user.company.catchPhrase;
+                        this.f_bs = user.company.bs;
                     }
                 },
 
                 guardar(){
                     if(this.action == "agregar"){
-                        var emailEncontrado = false;
-                        //Busca el email para ver si ya esta registrado
                         this.jsonUsuarios.forEach(user => {
                             if(user.id > this.f_id){ //Para buscar el ID mas alto
                                 this.f_id = user.id;
                             }
-                            if(user.email == this.f_email){
-                                emailEncontrado = true;
+                        });
+                        this.jsonUsuarios.push({
+                            id: this.f_id + 1,
+                            name: this.f_nombre,
+                            username: this.f_username,
+                            email: this.f_email,
+                            password: this.f_password,
+                            phone: this.f_telefono,
+                            website: this.f_sitioweb,
+                            company:{
+                                name: this.f_nombreComp,
+                                catchPhrase: this.f_eslogan,
+                                bs: this.f_bs
                             }
                         });
-                        //Si no lo encontro, agrega al usuario
-                        if(!emailEncontrado){
-                            this.jsonUsuarios.push({
-                                id: this.f_id + 1,
-                                name: this.f_nombre,
-                                username: this.f_username, 
-                                email: this.f_email, 
-                                phone: this.f_telefono, 
-                                website: this.f_sitioweb});
-                            this.goToTable();
-                        }
-                        else{
-                            alert("El correo electronico ya esta en uso, introduzca otro");
-                        }
+                        this.goToTable();
+                        swal("Usuario agregado", "Se agrego el usuario exitosamente", "success");
                     }
                     else if(this.action == "editar"){
                         //Busca en el arreglo el ID del que se quiere editar y le actualiza sus datos
@@ -145,22 +172,52 @@
                                 user.name = this.f_nombre;
                                 user.username = this.f_username;
                                 user.email = this.f_email;
+                                user.password = this.f_password;
                                 user.phone = this.f_telefono;
                                 user.website = this.f_sitioweb;
+                                user.company.name = this.f_nombreComp;
+                                user.company.catchPhrase = this.f_eslogan;
+                                user.company.bs = this.f_bs;
                             }
                         });
                         this.goToTable();
+                        swal("Usuario editado","Se edito el usuario exitosamente", "success");
                     }
                 },
-                
+
+                remover(user){
+                    swal({
+                        title: "¿Eliminar a '"+user.username+"'?",
+                        text: "¿Esta seguro de eliminar a '"+user.username+"'?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                    if (willDelete) {
+                        for (let i = 0; i < this.jsonUsuarios.length; i++) {
+                            if(this.jsonUsuarios[i].id == user.id){
+                                this.jsonUsuarios.splice(i, 1);
+                                i--;
+                            }
+                        }
+                        swal("Usuario eliminado", "Se elimino el usuario '"+user.username+"' exitosamente", "success");
+                    }
+                    });
+                    
+                },
                 goToTable(){ //Reinicia todo
                     this.f_id = 0;
                     this.action = "";
                     this.f_nombre = null;
                     this.f_username = null;
                     this.f_email =null;
+                    this.f_password =null;
                     this.f_telefono = null;
                     this.f_sitioweb = null;
+                    this.f_nombreComp = null;
+                    this.f_eslogan = null;
+                    this.f_bs = null;
                     this.show = "table";
                 }
 

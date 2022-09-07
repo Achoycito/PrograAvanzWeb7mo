@@ -84,13 +84,14 @@ body{
     font-size: 30px;
 }
 .tabla-usuarios{
-    font-size: 20px;
+    font-size: 17px;
     margin: 20px 0px;
 }
 .tabla-usuarios th, td{
+    margin: 10px;
+    max-width: 250px;
     border: 3px solid black;
     padding: 5px 10px;
-    margin: 10px;
 }
 .tabla-usuarios th{
     background-color: blueviolet;
@@ -99,4 +100,8 @@ body{
 .tabla-usuarios td{
     background-color: #aaf;
     color: black;
+}
+.acciones{
+    width: 220px;
+    align-items: center;
 }
