@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue - Inicio de sesion</title>
+
+    <!-- Enlazar Vue.js -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+    <div id="contenedor">
+        <h1>Dashboard</h1>
+        <form>
+            <fieldset>
+                <legend>
+                    Inicio de sesion
+                </legend>
+                <input type="text" placeholder="Nombre de usuario" v-model="username">
+                <br>
+                <input type="password" placeholder="Contraseña" v-model="password">
+                <br>
+                <button @click="login">ACCEDER</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        const {createApp} = Vue;
+        var miStorage = window.localStorage;
+        const data = null;
+        const error = null;
+        
+        const app = createApp({
+            data(){
+                return{
+                    users:null,
+                    username:"",
+                    password:""
+                }
+            },
+            methods:{
+                login(e){
+                    // var axios = require('axios');
+                    // var FormData = require('form-data');
+                    e.preventDefault();
+                    var data = new FormData();
+                    data.append('username', this.username);
+                    data.append('password', this.password);
+                    data.append('request_token', '');
+
+                    var config = {
+                    method: 'post',
+                    url: 'https://api.themoviedb.org/3/authentication/token/validate_with_login',
+                    headers: { 
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZGVmNjQ4ZWQ5YTFhNDY5YjY5MzZlMDNhMjI5Yzg5NiIsInN1YiI6IjYzMWUzM2Q5MGQyZjUzMDA3YzZiZDc4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.f6J0Wq5Np6EIroU5XVy7GzJlA1e8jyBXTFuAfr2hGf8', 
+                        // ...data.getHeaders()
+                    },
+                    data : data
+                    };
+
+                    axios(config)
+                    .then(function (response) {
+                        if(response.data.success){
+                            var userTemp = {
+                                username: app.username
+                            }
+                            localStorage.setItem("user", JSON.stringify(userTemp));
+                            window.location.href = "peliculas.html";
+                        }
+                    })
+                    .catch(function (error) {
+                        swal("Datos incorrectos", "Los datos para el inicio de sesion son incorrectos", "error");
+                    });
+                }
+            }
+        }).mount("#contenedor")
+
+
+    </script>
+</body>
+</html>
