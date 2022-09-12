@@ -31,6 +31,7 @@
                         <div class="card-body">
                             <h6 class="card-title">
                                 {{movieDetail}}
+                                <!-- {{movieDetail.title}} -->
                             </h6>
                         </div>
                     </div>
@@ -65,8 +66,7 @@
 
                     axios(config)
                     .then(function (response) {
-                        app.movieDetail = JSON.stringify(response.data);
-                        app.movieDetail = JSON.parse(app.movieDetail);
+                        app.movieDetail = response.data;
                     })
                     .catch(function (error) {
                         console.log(error);
