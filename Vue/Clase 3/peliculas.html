@@ -21,6 +21,9 @@
 </head>
 <body>
     <div id="contenedor">
+
+        <button @click="volver()" type="button" class="btn btn-danger m-2">Cerrar sesión</button>
+
         <div class="container-xxl my-4">
             <h1>Popular en Peliculas</h1>
         </div>
@@ -44,6 +47,12 @@
     </div>
 
     <script type="text/javascript">
+        window.onload = function(){
+            if(localStorage.getItem("user") == null){
+                window.location.href = "index.html";
+            }
+        }
+
         const {createApp} = Vue;
         var miStorage = window.localStorage;
         const data = null;
@@ -56,10 +65,14 @@
                 }
             },
             methods:{
+                volver(){
+                    localStorage.removeItem("user");
+                    window.location.href = "index.html";
+                },
                 getPeliculas(){
                     var config = {
                     method: 'get',
-                    url: 'https://api.themoviedb.org/3/movie/popular?&language=es-MX',
+                    url: 'https://api.themoviedb.org/3/movie/popular?language=es-MX',
                     headers: { 
                         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZGVmNjQ4ZWQ5YTFhNDY5YjY5MzZlMDNhMjI5Yzg5NiIsInN1YiI6IjYzMWUzM2Q5MGQyZjUzMDA3YzZiZDc4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.f6J0Wq5Np6EIroU5XVy7GzJlA1e8jyBXTFuAfr2hGf8'
                     }
@@ -67,6 +80,7 @@
 
                     axios(config)
                     .then(function (response) {
+                        console.log(response.data);
                         app.peliculas = response.data.results;
                     })
                     .catch(function (error) {
@@ -74,7 +88,6 @@
                     });
                 },
                 goToMovieDetail(movie){
-                    console.log(movie.id);
                     localStorage.setItem("movieID", movie.id);
                     window.location.href = "pelicula-detalles.html";
                 }
@@ -83,8 +96,6 @@
                 this.getPeliculas();
             }
         }).mount("#contenedor")
-
-        // window.onload(app.getPeliculas);
 
     </script>
 </body>
