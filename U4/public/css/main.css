@@ -1,0 +1,13 @@
+.container form fieldset {
+  background-color: antiquewhite;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.container form fieldset legend {
+  font-weight: bold;
+}
+.container form fieldset button {
+  width: 200px;
+  background-color: #2D89F7;
+  border: 1px solid black;
+  border-radius: 5px;
+}
