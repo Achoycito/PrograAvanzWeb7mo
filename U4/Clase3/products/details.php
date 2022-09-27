@@ -24,18 +24,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <?php for($i=0;$i<12;$i++){?>
-                        <div class="card col-3">
-                            <img src="../public/img/img.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Producto</h5>
-                                <p class="card-text">Descripcion de producto</p>
-                                <a href="details.php" class="btn btn-info">Detalles</a>
-                                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
-                                <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
-                            </div>
+                    <div class="card col-5">
+                        <img src="../public/img/img.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Producto</h5>
+                            <p class="card-text">Descripcion de producto</p>
+                            <a href="details.php" class="btn btn-info">Detalles</a>
+                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
+                            <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
                         </div>
-                    <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>
