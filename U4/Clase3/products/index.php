@@ -1,7 +1,10 @@
+<?php include "../app/ProductController.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include "../layout/head.php"; ?>
+    <title>Todos los productos</title>
 </head>
 <body>
     
@@ -24,12 +27,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <?php for($i=0;$i<12;$i++){?>
+                    <?php foreach($arrayProducts as $product){?>
                         <div class="card col-3">
-                            <img src="../public/img/img.jpg" class="card-img-top" alt="...">
+                            <img src="<?php echo $product->cover ?>" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Producto</h5>
-                                <p class="card-text">Descripcion de producto</p>
+                                <h5 class="card-title"><?php echo $product->name; ?></h5>
+                                <p class="text-muted">
+                                    <?php
+                                    if($product->brand!=null){
+                                        echo $product->brand->name;
+                                    } else{
+                                        echo "Sin marca";
+                                    } ?>
+                                </p>
                                 <a href="details.php" class="btn btn-info">Detalles</a>
                                 <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
                                 <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>

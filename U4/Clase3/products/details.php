@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <?php include "../layout/head.php"; ?>
+    <title>Detalle de producto</title>
 </head>
 <body>
     
