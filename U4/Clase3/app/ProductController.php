@@ -12,6 +12,23 @@ else{
     header("Location:..");
 }
 
+
+if(isset($_POST["action"])){
+    switch($_POST["action"]){
+        case "create":
+            $name = strip_tags($_POST["name"]);
+            $slug = strip_tags($_POST["slug"]);
+            $descripcion = strip_tags($_POST["descripcion"]);
+            $caracteristicas = strip_tags($_POST["caracteristicas"]);
+            $idmarca = strip_tags($_POST["idmarca"]);
+            
+            $productController = new ProductController();
+            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca);
+            break;
+            
+    }
+}
+
 Class ProductController{
     public function getAllProducts($token){
         $curl = curl_init();
@@ -36,6 +53,43 @@ Class ProductController{
         $response = json_decode($response);
         if(isset($response->code) && $response->code > 0){
             return $response->data;
+        }
+    }
+
+    public function createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca){
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            "Authorization: Bearer {$_SESSION['token']}"
+        ),
+        CURLOPT_POSTFIELDS => array(
+            'name' => $name,
+            'slug' => $slug,
+            'description' => $descripcion,
+            'features' => $caracteristicas,
+            'brand_id' => $idmarca)
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        echo $response;
+        $response = json_decode($response);
+
+        if(isset($response->code) && $response->code > 0){
+            header("Location:../products/?success=ok");
+        }
+        else{
+            header("Location:../products/?error=true");
         }
     }
 }

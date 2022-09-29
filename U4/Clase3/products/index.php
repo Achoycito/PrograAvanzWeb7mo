@@ -55,17 +55,38 @@
     <div class="modal fade" id="modalFormProd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="../app/ProductController.php" method="post" class="form">
+
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" name="name" placeholder="Nombre del producto">
+                        </div>
+                        <div class="mb-3">
+                            <label>Slug</label>
+                            <input type="text" class="form-control" name="slug" placeholder="Slug del producto">
+                        </div>
+                        <div class="mb-3">
+                            <label>Descripcion</label>
+                            <input type="text" class="form-control" name="descripcion" placeholder="Descripcion del producto">
+                        </div>
+                        <div class="mb-3">
+                            <label>Caracteristicas</label>
+                            <input type="text" class="form-control" name="caracteristicas" placeholder="Caracteristicas del producto">
+                        </div>
+                        <div class="mb-3">
+                            <label>ID de la marca</label>
+                            <input type="number" class="form-control" name="idmarca" placeholder="ID de la marca">
+                        </div>
+
+                        <input type="hidden" name="action" value="create">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
