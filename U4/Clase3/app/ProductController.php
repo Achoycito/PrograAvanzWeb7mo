@@ -16,14 +16,16 @@ else{
 if(isset($_POST["action"])){
     switch($_POST["action"]){
         case "create":
-            $name = strip_tags($_POST["name"]);
-            $slug = strip_tags($_POST["slug"]);
-            $descripcion = strip_tags($_POST["descripcion"]);
-            $caracteristicas = strip_tags($_POST["caracteristicas"]);
-            $idmarca = strip_tags($_POST["idmarca"]);
+            $name = strip_tags($_POST['name']);
+            $slug = strip_tags($_POST['slug']);
+            $descripcion = strip_tags($_POST['descripcion']);
+            $caracteristicas = strip_tags($_POST['caracteristicas']);
+            $idmarca = strip_tags($_POST['idmarca']);
+
+            $imgproducto = $_FILES['imgproducto']['tmp_name'];
             
             $productController = new ProductController();
-            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca);
+            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca, $imgproducto);
             break;
             
     }
@@ -56,7 +58,7 @@ Class ProductController{
         }
     }
 
-    public function createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca){
+    public function createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca, $imgproducto){
 
         $curl = curl_init();
 
@@ -77,8 +79,16 @@ Class ProductController{
             'slug' => $slug,
             'description' => $descripcion,
             'features' => $caracteristicas,
-            'brand_id' => $idmarca)
+            'brand_id' => $idmarca,
+            'cover'=> new CURLFILE($imgproducto))
         ));
+
+        // echo $name;
+        // echo $slug;
+        // echo $descripcion;
+        // echo $caracteristicas;
+        // echo $idmarca;
+        // echo $imgproducto;
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -91,6 +101,8 @@ Class ProductController{
         else{
             header("Location:../products/?error=true");
         }
+
+
     }
 }
 ?>

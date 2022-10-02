@@ -60,7 +60,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../app/ProductController.php" method="post" class="form">
+                    <form enctype="multipart/form-data" action="../app/ProductController.php" method="post" class="form">
 
                         <div class="mb-3">
                             <label>Nombre</label>
@@ -81,6 +81,11 @@
                         <div class="mb-3">
                             <label>ID de la marca</label>
                             <input type="number" class="form-control" name="idmarca" placeholder="ID de la marca">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Default file input example</label>
+                            <input type="file" name="imgproducto" class="form-control">
                         </div>
 
                         <input type="hidden" name="action" value="create">
