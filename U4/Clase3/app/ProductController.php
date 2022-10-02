@@ -2,16 +2,17 @@
 
 session_start();
 $arrayProducts = [];
+$arrayBrands = [];
 
 if(isset($_SESSION["token"])){
     $productController = new ProductController();
     $token = strip_tags($_SESSION["token"]);
     $arrayProducts = $productController->getAllProducts($token);
+    $arrayBrands = $productController->getAllBrands($token);
 }
 else{
     header("Location:..");
 }
-
 
 if(isset($_POST["action"])){
     switch($_POST["action"]){
@@ -20,14 +21,13 @@ if(isset($_POST["action"])){
             $slug = strip_tags($_POST['slug']);
             $descripcion = strip_tags($_POST['descripcion']);
             $caracteristicas = strip_tags($_POST['caracteristicas']);
-            $idmarca = strip_tags($_POST['idmarca']);
+            $marca = strip_tags($_POST['marca']);
 
             $imgproducto = $_FILES['imgproducto']['tmp_name'];
             
             $productController = new ProductController();
-            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca, $imgproducto);
+            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
             break;
-            
     }
 }
 
@@ -56,9 +56,43 @@ Class ProductController{
         if(isset($response->code) && $response->code > 0){
             return $response->data;
         }
+        else{
+            return [];
+        }
     }
 
-    public function createProduct($name, $slug, $descripcion, $caracteristicas, $idmarca, $imgproducto){
+    public function getAllBrands($token){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://crud.jonathansoto.mx/api/brands',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$token
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        // echo $response;
+        $response = json_decode($response);
+
+        if(isset($response->code) && $response->code > 0){
+            return $response->data;
+        }
+        else{
+            return [];
+        }
+
+    }
+
+    public function createProduct($name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto){
 
         $curl = curl_init();
 
@@ -79,7 +113,7 @@ Class ProductController{
             'slug' => $slug,
             'description' => $descripcion,
             'features' => $caracteristicas,
-            'brand_id' => $idmarca,
+            'brand_id' => $marca,
             'cover'=> new CURLFILE($imgproducto))
         ));
 
@@ -87,7 +121,7 @@ Class ProductController{
         // echo $slug;
         // echo $descripcion;
         // echo $caracteristicas;
-        // echo $idmarca;
+        // echo $marca;
         // echo $imgproducto;
 
         $response = curl_exec($curl);

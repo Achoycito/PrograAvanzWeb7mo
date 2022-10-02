@@ -79,12 +79,15 @@
                             <input type="text" class="form-control" name="caracteristicas" placeholder="Caracteristicas del producto">
                         </div>
                         <div class="mb-3">
-                            <label>ID de la marca</label>
-                            <input type="number" class="form-control" name="idmarca" placeholder="ID de la marca">
+                            <label>Marca</label>
+                            <select name="marca" class="form-select" required>
+                                <?php foreach($arrayBrands as $brand){ ?>
+                                    <option value="<?php echo $brand->id; ?>" class="dropdown-item"><?php echo $brand->name; ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Default file input example</label>
+                            <label class="form-label">Imagen del producto</label>
                             <input type="file" name="imgproducto" class="form-control">
                         </div>
 
