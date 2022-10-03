@@ -40,7 +40,7 @@
                                         echo "Sin marca";
                                     } ?>
                                 </p>
-                                <a href="details.php" class="btn btn-info">Detalles</a>
+                                <a href="details.php?slug=<?php echo $product->slug; ?>" class="btn btn-info">Detalles</a>
                                 <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
                                 <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
                             </div>

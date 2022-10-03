@@ -138,5 +138,9 @@ Class ProductController{
 
 
     }
+
+    public function getProductDetail(){
+        
+    }
 }
 ?>

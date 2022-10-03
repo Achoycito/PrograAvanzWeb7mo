@@ -25,14 +25,32 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="card col-5">
-                        <img src="../public/img/img.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Producto</h5>
-                            <p class="card-text">Descripcion de producto</p>
-                            <a href="details.php" class="btn btn-info">Detalles</a>
-                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
-                            <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
+                    <div class="card col-12">
+                        <div class="row">
+
+                            <div class="col-3">
+                                <img src="../public/img/img.jpg" class="card-img-top" alt="...">
+                            </div>
+                            <div class="col-9">
+                                <div class="card-body">
+                                    <h3 class="card-title">Nombre del producto</h3>
+                                    <p class="card-text">
+                                        <span class="badge bg-primary">(Categoria)</span>
+                                        <span class="badge bg-primary">(Categoria)</span>
+                                        <span class="badge bg-secondary">(Etiqueta)</span>
+                                        <span class="badge bg-secondary">(Etiqueta)</span>
+                                    </p>
+                                    <h6 class="card-title">Marca del producto</h6>
+                                    <p class="card-text">(Marca)</p>
+                                    <h6 class="card-title">Descripcion del producto</h6>
+                                    <p class="card-text">(Descripcion)</p>
+                                    <h6 class="card-title">Caracteristicas del producto</h6>
+                                    <p class="card-text">(Caracteristicas)</p>
+                                    <!-- <a href="details.php" class="btn btn-info">Detalles</a>
+                                    <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
+                                    <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a> -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
