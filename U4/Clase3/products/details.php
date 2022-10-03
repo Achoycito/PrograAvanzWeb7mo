@@ -1,3 +1,5 @@
+<?php include "../app/ProductController.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,36 +18,38 @@
             <div class="col-lg-10 col-sm-12">
                 <div class="row">
                     <div class="col-auto">
-                        <h1>Productos</h1>
+                        <h1>Detalle de producto</h1>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProd">
                             Agregar producto
                         </button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="row">
                     <div class="card col-12">
                         <div class="row">
 
-                            <div class="col-3">
-                                <img src="../public/img/img.jpg" class="card-img-top" alt="...">
+                            <div class="col-2">
+                                <img src="<?php echo $product_details->cover; ?>" class="card-img-top" alt="...">
                             </div>
-                            <div class="col-9">
+                            <div class="col-10">
                                 <div class="card-body">
-                                    <h3 class="card-title">Nombre del producto</h3>
+                                    <h3 class="card-title"><?php echo $product_details->name; ?></h3>
                                     <p class="card-text">
-                                        <span class="badge bg-primary">(Categoria)</span>
-                                        <span class="badge bg-primary">(Categoria)</span>
-                                        <span class="badge bg-secondary">(Etiqueta)</span>
-                                        <span class="badge bg-secondary">(Etiqueta)</span>
+                                        <?php foreach($product_details->categories as $categorie){ ?>
+                                            <span class="badge bg-primary"><?php echo $categorie->name; ?></span>
+                                        <?php } ?>
+                                        <?php foreach($product_details->tags as $tag){ ?>
+                                            <span class="badge text-bg-light"><?php echo $tag->name; ?></span>
+                                        <?php } ?>
                                     </p>
                                     <h6 class="card-title">Marca del producto</h6>
-                                    <p class="card-text">(Marca)</p>
+                                    <p class="card-text"><?php echo $product_details->brand->name; ?></p>
                                     <h6 class="card-title">Descripcion del producto</h6>
-                                    <p class="card-text">(Descripcion)</p>
+                                    <p class="card-text"><?php echo $product_details->description; ?></p>
                                     <h6 class="card-title">Caracteristicas del producto</h6>
-                                    <p class="card-text">(Caracteristicas)</p>
+                                    <p class="card-text"><?php echo $product_details->features; ?></p>
                                     <!-- <a href="details.php" class="btn btn-info">Detalles</a>
                                     <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
                                     <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a> -->

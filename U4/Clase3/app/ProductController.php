@@ -1,18 +1,31 @@
 <?php
 
 session_start();
+$productController = new ProductController();
+
 $arrayProducts = [];
 $arrayBrands = [];
+$url_product_slug = "";
+$product_details = [];
 
 if(isset($_SESSION["token"])){
-    $productController = new ProductController();
     $token = strip_tags($_SESSION["token"]);
     $arrayProducts = $productController->getAllProducts($token);
     $arrayBrands = $productController->getAllBrands($token);
+
+    if(isset($_GET["slug"])){
+        $url_product_slug = $_GET["slug"];
+        // echo "<h1>".$url_product_slug."</h1>";
+        $product_details = $productController->getProductDetail($url_product_slug, $token);
+    }
+    // else{
+        // echo "<h1>Nel no hay slug</h1>";
+    // }
 }
 else{
     header("Location:..");
 }
+
 
 if(isset($_POST["action"])){
     switch($_POST["action"]){
@@ -25,11 +38,11 @@ if(isset($_POST["action"])){
 
             $imgproducto = $_FILES['imgproducto']['tmp_name'];
             
-            $productController = new ProductController();
             $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
             break;
     }
 }
+
 
 Class ProductController{
     public function getAllProducts($token){
@@ -139,8 +152,35 @@ Class ProductController{
 
     }
 
-    public function getProductDetail(){
+    public function getProductDetail($url_product_slug, $token){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products/slug/'.$url_product_slug,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$token
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        // echo $response;
+        $response = json_decode($response);
         
+        if(isset($response->code) && $response->code > 0){
+            return $response->data;
+        }
+        else{
+            return [];
+        }
     }
 }
 ?>
