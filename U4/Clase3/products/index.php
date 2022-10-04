@@ -21,7 +21,7 @@
                         <h1>Productos</h1>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProd">
+                        <button onclick="setInputOculto('create')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProd">
                             Agregar producto
                         </button>
                     </div>
@@ -41,7 +41,7 @@
                                     } ?>
                                 </p>
                                 <a href="details.php?slug=<?php echo $product->slug; ?>" class="btn btn-info">Detalles</a>
-                                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
+                                <button onclick="setupModalToEdit(this)" data-product='<?php echo json_encode($product);?>' class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</button>
                                 <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
                             </div>
                         </div>
@@ -64,23 +64,23 @@
 
                         <div class="mb-3">
                             <label>Nombre</label>
-                            <input type="text" class="form-control" name="name" placeholder="Nombre del producto">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre del producto">
                         </div>
                         <div class="mb-3">
                             <label>Slug</label>
-                            <input type="text" class="form-control" name="slug" placeholder="Slug del producto">
+                            <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug del producto">
                         </div>
                         <div class="mb-3">
                             <label>Descripcion</label>
-                            <input type="text" class="form-control" name="descripcion" placeholder="Descripcion del producto">
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion del producto">
                         </div>
                         <div class="mb-3">
                             <label>Caracteristicas</label>
-                            <input type="text" class="form-control" name="caracteristicas" placeholder="Caracteristicas del producto">
+                            <input type="text" class="form-control" id="caracteristicas" name="caracteristicas" placeholder="Caracteristicas del producto">
                         </div>
                         <div class="mb-3">
                             <label>Marca</label>
-                            <select name="marca" class="form-select" required>
+                            <select id="marca" name="marca" class="form-select" required>
                                 <?php foreach($arrayBrands as $brand){ ?>
                                     <option value="<?php echo $brand->id; ?>" class="dropdown-item"><?php echo $brand->name; ?></option>
                                 <?php } ?>
@@ -91,7 +91,9 @@
                             <input type="file" name="imgproducto" class="form-control">
                         </div>
 
-                        <input type="hidden" name="action" value="create">
+                        <input id="id" type="hidden" name="id">
+
+                        <input id="input_oculto" type="hidden" name="action" value="create">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
                 </div>
@@ -100,6 +102,26 @@
     </div>
 
     <script>
+
+        function setInputOculto(valor){
+            document.getElementById("input_oculto").value = valor;
+        }
+
+        function setupModalInputs(boton){
+            let info_producto = JSON.parse(boton.dataset.product);
+            console.log(info_producto.id);
+            document.getElementById("name").value = info_producto.name;
+            document.getElementById("slug").value = info_producto.slug;
+            document.getElementById("descripcion").value = info_producto.description;
+            document.getElementById("caracteristicas").value = info_producto.features;
+            document.getElementById("marca").value = info_producto.brand_id;
+            document.getElementById("id").value = info_producto.id;
+        }
+
+        function setupModalToEdit(boton){
+            setInputOculto("edit");
+            setupModalInputs(boton);
+        }
         function remove(){
             Swal.fire({
                 title: 'Are you sure?',
