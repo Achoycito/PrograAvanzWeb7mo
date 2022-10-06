@@ -42,7 +42,7 @@
                                 </p>
                                 <a href="details.php?slug=<?php echo $product->slug; ?>" class="btn btn-info">Detalles</a>
                                 <button onclick="setupModalToEdit(this)" data-product='<?php echo json_encode($product);?>' class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</button>
-                                <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a>
+                                <button onclick="remove(<?php echo $product->id; ?>)" class="btn btn-danger">Eliminar</button>
                             </div>
                         </div>
                     <?php } ?>
@@ -122,7 +122,7 @@
             setInputOculto("edit");
             setupModalInputs(boton);
         }
-        function remove(){
+        function remove(id){
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -133,11 +133,19 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-                )
+                var bodyFormData = new FormData();
+                bodyFormData.append('id', id);
+                bodyFormData.append('action', 'delete');
+
+                axios.post('../app/ProductController.php', bodyFormData)
+                .then(function (response){
+                    if(response.status == 200){
+                        window.location.reload();
+                    }
+                })
+                .catch(function (error){
+                    console.log('error');
+                })
             }
             })
         }

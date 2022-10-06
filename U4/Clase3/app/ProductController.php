@@ -48,7 +48,10 @@ if(isset($_POST["action"])){
             $marca = strip_tags($_POST['marca']);
             $id = strip_tags($_POST['id']);
             $productController->updateProduct($name, $slug, $descripcion, $caracteristicas, $marca, $id);
-            break;    
+            break;
+        case 'delete':
+            $id = strip_tags($_POST["id"]);
+            $productController->deleteProduct($id);
         }
 }
 
@@ -211,7 +214,27 @@ Class ProductController{
     }
 
 
+    public function deleteProduct($id){
+        $curl = curl_init();
 
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products/'.$id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '.$_SESSION['token']
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+    }
 
 
     public function getProductDetail($url_product_slug, $token){
