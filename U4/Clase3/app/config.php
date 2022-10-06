@@ -5,6 +5,6 @@ if(!isset($_SESSION['global_token'])){
 }
 
 if(!defined('BASE_PATH')){
-    defined('BASE_PATH', "http://localhost/JonyJelkichen/U4/");
+    define('BASE_PATH', "http://localhost/JonyJelkichen/U4/Clase3/");
 }
 ?>
