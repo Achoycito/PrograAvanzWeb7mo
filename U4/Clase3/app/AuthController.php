@@ -1,13 +1,20 @@
 <?php
+include_once "config.php";
 
 if(isset($_POST['action'])){
-    switch($_POST['action']){
-        case 'access':
-            $authController = new AuthController();
-            $email = strip_tags($_POST['email']);
-            $password = strip_tags($_POST['password']);
-            $authController->login($email, $password);
-        break;
+    echo "esta seteado el action";
+    if(isset($_POST["global_token"]) && ($_POST["global_token"] == $_SESSION["global_token"])){
+        echo "segunda validacion que hueva escribir toda";
+    
+        switch($_POST['action']){
+            case 'access':
+                echo "switch case access";
+                $authController = new AuthController();
+                $email = strip_tags($_POST['email']);
+                $password = strip_tags($_POST['password']);
+                $authController->login($email, $password);
+            break;
+        }
     }
 }
 
@@ -35,15 +42,16 @@ Class AuthController{
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            session_start();
+            // session_start();
             $_SESSION["name"] = $response->data->name;
             $_SESSION["lastname"] = $response->data->lastname;
             $_SESSION["avatar"] = $response->data->avatar;
-            $_SESSION["token"] = $response->data->token;
+            $_SESSION["global_token"] = $response->data->token;
             header("Location:../products");
         }
         else{
             header("Location:../?error=true");
+            echo "error";
         }
     }
 }

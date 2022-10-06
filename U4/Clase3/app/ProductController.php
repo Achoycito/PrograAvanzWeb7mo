@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include_once "config.php";
 $productController = new ProductController();
 
 $arrayProducts = [];
@@ -8,8 +8,8 @@ $arrayBrands = [];
 $url_product_slug = "";
 $product_details = [];
 
-if(isset($_SESSION["token"])){
-    $token = strip_tags($_SESSION["token"]);
+if(isset($_SESSION["global_token"])){
+    $token = strip_tags($_SESSION["global_token"]);
     $arrayProducts = $productController->getAllProducts($token);
     $arrayBrands = $productController->getAllBrands($token);
 
@@ -131,7 +131,7 @@ Class ProductController{
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array(
-            "Authorization: Bearer {$_SESSION['token']}"
+            "Authorization: Bearer {$_SESSION['global_token']}"
         ),
         CURLOPT_POSTFIELDS => array(
             'name' => $name,
@@ -188,7 +188,7 @@ Class ProductController{
         &brand_id='.$marca.'
         &id='.$id,
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['token'],
+            'Authorization: Bearer '.$_SESSION['global_token'],
             'Content-Type: application/x-www-form-urlencoded'
         ),
         ));
@@ -227,7 +227,7 @@ Class ProductController{
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'DELETE',
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['token']
+            'Authorization: Bearer '.$_SESSION['global_token']
         ),
         ));
 
