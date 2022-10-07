@@ -2,13 +2,9 @@
 include_once "config.php";
 
 if(isset($_POST['action'])){
-    echo "esta seteado el action";
     if(isset($_POST["global_token"]) && ($_POST["global_token"] == $_SESSION["global_token"])){
-        echo "segunda validacion que hueva escribir toda";
-    
         switch($_POST['action']){
             case 'access':
-                echo "switch case access";
                 $authController = new AuthController();
                 $email = strip_tags($_POST['email']);
                 $password = strip_tags($_POST['password']);
@@ -20,9 +16,7 @@ if(isset($_POST['action'])){
 
 Class AuthController{
     public function login($email, $password){
-
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://crud.jonathansoto.mx/api/login',
         CURLOPT_RETURNTRANSFER => true,
@@ -38,20 +32,17 @@ Class AuthController{
         $response = curl_exec($curl);
         curl_close($curl);
         echo $response;
-
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            // session_start();
             $_SESSION["name"] = $response->data->name;
             $_SESSION["lastname"] = $response->data->lastname;
             $_SESSION["avatar"] = $response->data->avatar;
-            $_SESSION["global_token"] = $response->data->token;
+            $_SESSION["token"] = $response->data->token;
             header("Location:".BASE_PATH."products");
         }
         else{
-            header("Location:".BASE_PATH."?error=true");
-            echo "error";
+            header("Location:".BASE_PATH."?logeado=false");
         }
     }
 }

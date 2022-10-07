@@ -1,4 +1,5 @@
 <?php include "../app/ProductController.php"; ?>
+<?php include "../app/BrandController.php"; ?>
 
 <!DOCTYPE html>
 <html lang="en">

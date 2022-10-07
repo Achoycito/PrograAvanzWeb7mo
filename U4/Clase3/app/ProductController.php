@@ -1,31 +1,31 @@
 <?php
 
 include_once "config.php";
+
 $productController = new ProductController();
 
 $arrayProducts = [];
-$arrayBrands = [];
 $url_product_slug = "";
 $product_details = [];
 
-if(isset($_SESSION["global_token"])){
-    $token = strip_tags($_SESSION["global_token"]);
+if(isset($_SESSION["token"])){
+    if(!isset($token)){
+        $token = strip_tags($_SESSION["token"]);
+    }
     $arrayProducts = $productController->getAllProducts($token);
-    $arrayBrands = $productController->getAllBrands($token);
-
     if(isset($_GET["slug"])){
         $url_product_slug = $_GET["slug"];
-        // echo "<h1>".$url_product_slug."</h1>";
-        $product_details = $productController->getProductDetail($url_product_slug, $token);
+        $product_details = $productController->getProductDetail($token, $url_product_slug);
     }
-    // else{
-        // echo "<h1>Nel no hay slug</h1>";
-    // }
+    else{
+        echo "<h1>No hay slug en el URL</h1>";
+    }
 }
 else{
-    header("Location:..");
+    header("Location:".BASE_PATH);
+    // echo "Nel compadre usted sale que no esta logeado";
+    echo "<h1>NO HAY SESION[TOKEN]</h1>";
 }
-
 
 if(isset($_POST["action"])){
     switch($_POST["action"]){
@@ -38,7 +38,7 @@ if(isset($_POST["action"])){
             
             $imgproducto = $_FILES['imgproducto']['tmp_name'];
             
-            $productController->createProduct($name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
+            $productController->createProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
             break;
         case "edit":
             $name = strip_tags($_POST['name']);
@@ -47,19 +47,18 @@ if(isset($_POST["action"])){
             $caracteristicas = strip_tags($_POST['caracteristicas']);
             $marca = strip_tags($_POST['marca']);
             $id = strip_tags($_POST['id']);
-            $productController->updateProduct($name, $slug, $descripcion, $caracteristicas, $marca, $id);
+            $productController->updateProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $id);
             break;
         case 'delete':
             $id = strip_tags($_POST["id"]);
-            $productController->deleteProduct($id);
+            $productController->deleteProduct($token, $id);
+            break;
         }
 }
-
 
 Class ProductController{
     public function getAllProducts($token){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products',
             CURLOPT_RETURNTRANSFER => true,
@@ -70,37 +69,8 @@ Class ProductController{
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer {$token}"
+                "Authorization: Bearer ".$token
             ),
-        ));
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        $response = json_decode($response);
-        if(isset($response->code) && $response->code > 0){
-            return $response->data;
-        }
-        else{
-            return [];
-        }
-    }
-
-    public function getAllBrands($token){
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'http://crud.jonathansoto.mx/api/brands',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$token
-        ),
         ));
 
         $response = curl_exec($curl);
@@ -114,13 +84,10 @@ Class ProductController{
         else{
             return [];
         }
-
     }
 
-    public function createProduct($name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto){
-
+    public function createProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products',
         CURLOPT_RETURNTRANSFER => true,
@@ -131,7 +98,7 @@ Class ProductController{
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array(
-            "Authorization: Bearer {$_SESSION['global_token']}"
+            "Authorization: Bearer ".$token
         ),
         CURLOPT_POSTFIELDS => array(
             'name' => $name,
@@ -142,35 +109,23 @@ Class ProductController{
             'cover'=> new CURLFILE($imgproducto))
         ));
 
-        // echo $name;
-        // echo $slug;
-        // echo $descripcion;
-        // echo $caracteristicas;
-        // echo $marca;
-        // echo $imgproducto;
+        // echo $name;echo $slug;echo $descripcion;echo $caracteristicas;echo $marca;echo $imgproducto;
 
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
+        // echo $response;
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            header("Location:../products/?success=ok");
+            header("Location:".BASE_PATH."products/?agregado=true");
         }
         else{
-            header("Location:../products/?error=true");
+            header("Location:".BASE_PATH."products/?agregado=false");
         }
-
-
     }
 
-
-
-
-    public function updateProduct($name, $slug, $descripcion, $caracteristicas, $marca, $id){
-
+    public function updateProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $id){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products',
         CURLOPT_RETURNTRANSFER => true,
@@ -188,35 +143,28 @@ Class ProductController{
         &brand_id='.$marca.'
         &id='.$id,
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['global_token'],
+            'Authorization: Bearer '.$token,
             'Content-Type: application/x-www-form-urlencoded'
         ),
         ));
 
-        echo $name;
-        echo $slug;
-        echo $descripcion;
-        echo $caracteristicas;
-        echo $marca;
-        echo $id;
+        // echo $name;echo $slug;echo $descripcion;echo $caracteristicas;echo $marca;echo $id;
 
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
+        // echo $response;
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            header("Location:../products/?success=ok");
+            header("Location:".BASE_PATH."products/?editado=true");
         }
         else{
-            header("Location:../products/?error=true");
+            header("Location:".BASE_PATH."products/?editado=false");
         }
     }
 
-
-    public function deleteProduct($id){
+    public function deleteProduct($token, $id){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products/'.$id,
         CURLOPT_RETURNTRANSFER => true,
@@ -227,19 +175,17 @@ Class ProductController{
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'DELETE',
         CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$_SESSION['global_token']
+            'Authorization: Bearer '.$token
         ),
         ));
 
         $response = curl_exec($curl);
-
         curl_close($curl);
+        // echo $response;
     }
 
-
-    public function getProductDetail($url_product_slug, $token){
+    public function getProductDetail($token, $url_product_slug){
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://crud.jonathansoto.mx/api/products/slug/'.$url_product_slug,
         CURLOPT_RETURNTRANSFER => true,
@@ -255,7 +201,6 @@ Class ProductController{
         ));
 
         $response = curl_exec($curl);
-
         curl_close($curl);
         // echo $response;
         $response = json_decode($response);
