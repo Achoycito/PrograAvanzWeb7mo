@@ -5,13 +5,12 @@
     <?php include "layout/head.php";?>
     <title>Acceso al panel</title>
 </head>
-<body>
 
+<body>
     <div class="container my-4">
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="bg-azul text-center">
-
                     <h3>Bienvenido a <br>Pollito Pio Producciones</h3>
                     <p>Inicie sesion para la oportunidad de su vida.</p>
                 </div>
@@ -32,4 +31,5 @@
         </div>
     </div>
 </body>
+
 </html>

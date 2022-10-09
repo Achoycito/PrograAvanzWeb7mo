@@ -17,43 +17,46 @@ if(isset($_SESSION["token"])){
         $url_product_slug = $_GET["slug"];
         $product_details = $productController->getProductDetail($token, $url_product_slug);
     }
-    else{
-        echo "<h1>No hay slug en el URL</h1>";
-    }
+    // else{
+    //     echo "<h1>No hay slug en el URL</h1>";
+    // }
 }
 else{
-    header("Location:".BASE_PATH);
+    header("Location:".BASE_PATH."login");
     // echo "Nel compadre usted sale que no esta logeado";
     echo "<h1>NO HAY SESION[TOKEN]</h1>";
 }
 
 if(isset($_POST["action"])){
-    switch($_POST["action"]){
-        case "create":
-            $name = strip_tags($_POST['name']);
-            $slug = strip_tags($_POST['slug']);
-            $descripcion = strip_tags($_POST['descripcion']);
-            $caracteristicas = strip_tags($_POST['caracteristicas']);
-            $marca = strip_tags($_POST['marca']);
-            
-            $imgproducto = $_FILES['imgproducto']['tmp_name'];
-            
-            $productController->createProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
-            break;
-        case "edit":
-            $name = strip_tags($_POST['name']);
-            $slug = strip_tags($_POST['slug']);
-            $descripcion = strip_tags($_POST['descripcion']);
-            $caracteristicas = strip_tags($_POST['caracteristicas']);
-            $marca = strip_tags($_POST['marca']);
-            $id = strip_tags($_POST['id']);
-            $productController->updateProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $id);
-            break;
-        case 'delete':
-            $id = strip_tags($_POST["id"]);
-            $productController->deleteProduct($token, $id);
-            break;
+    if(isset($_POST["global_token"]) && ($_POST["global_token"] == $_SESSION["global_token"])){
+        switch($_POST["action"]){
+            case "create":
+                $name = strip_tags($_POST['name']);
+                $slug = strip_tags($_POST['slug']);
+                $descripcion = strip_tags($_POST['descripcion']);
+                $caracteristicas = strip_tags($_POST['caracteristicas']);
+                $marca = strip_tags($_POST['marca']);
+                
+                $imgproducto = $_FILES['imgproducto']['tmp_name'];
+                
+                $productController->createProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $imgproducto);
+                break;
+            case "edit":
+                $name = strip_tags($_POST['name']);
+                $slug = strip_tags($_POST['slug']);
+                $descripcion = strip_tags($_POST['descripcion']);
+                $caracteristicas = strip_tags($_POST['caracteristicas']);
+                $marca = strip_tags($_POST['marca']);
+                $id = strip_tags($_POST['id']);
+                $productController->updateProduct($token, $name, $slug, $descripcion, $caracteristicas, $marca, $id);
+                break;
+            case 'delete':
+                $id = strip_tags($_POST["id"]);
+                $productController->deleteProduct($token, $id);
+                break;
         }
+    }
+    
 }
 
 Class ProductController{
@@ -117,10 +120,10 @@ Class ProductController{
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            header("Location:".BASE_PATH."products/?agregado=true");
+            header("Location:".BASE_PATH."product/all?agregado=true");
         }
         else{
-            header("Location:".BASE_PATH."products/?agregado=false");
+            header("Location:".BASE_PATH."product/all?agregado=false");
         }
     }
 
@@ -156,10 +159,10 @@ Class ProductController{
         $response = json_decode($response);
 
         if(isset($response->code) && $response->code > 0){
-            header("Location:".BASE_PATH."products/?editado=true");
+            header("Location:".BASE_PATH."product/all?editado=true");
         }
         else{
-            header("Location:".BASE_PATH."products/?editado=false");
+            header("Location:".BASE_PATH."product/all?editado=false");
         }
     }
 

@@ -41,7 +41,7 @@
                                         echo "Sin marca";
                                     } ?>
                                 </p>
-                                <a href="details.php?slug=<?php echo $product->slug; ?>" class="btn btn-info">Detalles</a>
+                                <a href="<?= BASE_PATH."product/".$product->slug ?>" class="btn btn-info">Detalles</a>
                                 <button onclick="setupModalToEdit(this)" data-product='<?php echo json_encode($product);?>' class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</button>
                                 <button onclick="remove(<?php echo $product->id; ?>)" class="btn btn-danger">Eliminar</button>
                             </div>
@@ -61,7 +61,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form enctype="multipart/form-data" action="../app/ProductController.php" method="post" class="form">
+                    <form enctype="multipart/form-data" action="<?= BASE_PATH?>prod" method="post" class="form">
 
                         <div class="mb-3">
                             <label>Nombre</label>
@@ -93,7 +93,7 @@
                         </div>
 
                         <input id="id" type="hidden" name="id">
-
+                        <input type="hidden" name="global_token" value="<?php echo $_SESSION['global_token'] ?>">
                         <input id="input_oculto" type="hidden" name="action" value="create">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
@@ -135,13 +135,14 @@
             }).then((result) => {
             if (result.isConfirmed) {
                 var bodyFormData = new FormData();
+                bodyFormData.append('global_token', '<?= $_SESSION['global_token'] ?>');
                 bodyFormData.append('id', id);
                 bodyFormData.append('action', 'delete');
 
-                axios.post('../app/ProductController.php', bodyFormData)
+                axios.post('<?= BASE_PATH?>prod', bodyFormData)
                 .then(function (response){
                     if(response.status == 200){
-                        window.location.reload();
+                        window.location.href = '<?=BASE_PATH."product/all?eliminado=true" ?>';
                     }
                 })
                 .catch(function (error){

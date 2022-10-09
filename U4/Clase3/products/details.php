@@ -20,16 +20,10 @@
                     <div class="col-auto">
                         <h1>Detalle de producto</h1>
                     </div>
-                    <!-- <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFormProd">
-                            Agregar producto
-                        </button>
-                    </div> -->
                 </div>
                 <div class="row">
                     <div class="card col-12">
                         <div class="row">
-
                             <div class="col-2">
                                 <img src="<?php echo $product_details->cover; ?>" class="card-img-top" alt="...">
                             </div>
@@ -50,9 +44,6 @@
                                     <p class="card-text"><?php echo $product_details->description; ?></p>
                                     <h6 class="card-title">Caracteristicas del producto</h6>
                                     <p class="card-text"><?php echo $product_details->features; ?></p>
-                                    <!-- <a href="details.php" class="btn btn-info">Detalles</a>
-                                    <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalFormProd">Editar</a>
-                                    <a href="#" class="btn btn-danger" onclick="remove()">Eliminar</a> -->
                                 </div>
                             </div>
                         </div>
@@ -63,7 +54,7 @@
     </div>
 
     <!-- MODAL AGREGAR PRODUCTO -->
-    <div class="modal fade" id="modalFormProd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="modalFormProd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -79,29 +70,7 @@
             </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        function remove(){
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-                )
-            }
-            })
-        }
-    </script>
+    </div> -->
 
     <?php include "../layout/scripts.php"; ?>
 </body>

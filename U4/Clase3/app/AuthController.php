@@ -39,10 +39,10 @@ Class AuthController{
             $_SESSION["lastname"] = $response->data->lastname;
             $_SESSION["avatar"] = $response->data->avatar;
             $_SESSION["token"] = $response->data->token;
-            header("Location:".BASE_PATH."products");
+            header("Location:".BASE_PATH."product/all");
         }
         else{
-            header("Location:".BASE_PATH."?logeado=false");
+            header("Location:".BASE_PATH."login?logeado=false");
         }
     }
 }

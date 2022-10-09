@@ -11,7 +11,7 @@ if(isset($_SESSION["token"])){
     $arrayBrands = $brandController->getAllBrands($token);
 }
 else{
-    // header("Location:".BASE_PATH);
+    header("Location:".BASE_PATH."login");
     // echo "Nel compadre usted sale que no esta logeado";
     echo "<h1>NO HAY SESION[TOKEN]</h1>";
 }
