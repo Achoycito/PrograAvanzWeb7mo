@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +12,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,3 +34,10 @@ Route::get('/suma/{n1}/{n2}/{n3?}', function ($n1, $n2, $n3=0) {
 })->where(['n1' => '[0-9]+'], ['n2' =>'[0-9]+']);
 
 Route::post('suma/', function(Request $request){});
+
+//Por cierto, al parecer tengo una versión viejita de PHP porque #WAMP,
+//y me instaló Laravel 5.4, y así se llaman a estas funciones en Laravel 5.4
+Route::get('users/create', 'UserController@create');
+Route::get('users/', 'UserController@index');
+Route::get('users/{id}', 'UserController@show');
+Route::post('users/', 'UserController@store');
