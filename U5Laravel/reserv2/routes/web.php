@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -40,3 +41,6 @@ Route::get('users/', [UserController::class, 'index']);
 Route::get('users/create', [UserController::class, 'create']);
 Route::get('users/{id}', [UserController::class, 'show']);
 Route::post('users/', [UserController::class, 'store']);
+
+Route::get('clients/', [ClientController::class, 'index']);
+Route::get('clients/{id}', [ClientController::class, 'show']);
