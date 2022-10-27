@@ -18,11 +18,14 @@ return new class extends Migration
 
             // $table->foreign('client_id')->references('id')->on('clients');
             // $table->foreign('id_room')->references('id')->on('rooms');
+            $table -> unsignedBigInteger('client_id');
             $table->date('start_date');
             $table->date('end_date');
             $table->float('total', 10, 2); //10 digitos en total, 2 despues del punto
 
             $table->timestamps();
+
+            $table->foreign('client_id')->references('id')->on('clients');
         });
     }
 

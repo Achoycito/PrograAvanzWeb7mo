@@ -16,7 +16,7 @@ class ReservationSeeder extends Seeder
     public function run()
     {
         $reserv = new Reservation();
-        // $reserv->client_id = 1;
+        $reserv->client_id = 1;
         // $reserv->id_room = 1;
         $reserv->start_date = '2022-10-22';
         $reserv->end_date = '2022-10-26';
@@ -24,7 +24,7 @@ class ReservationSeeder extends Seeder
         $reserv->save();
 
         $reserv = new Reservation();
-        // $reserv->client_id = 1;
+        $reserv->client_id = 1;
         // $reserv->id_room = 1;
         $reserv->start_date = '2022-10-10';
         $reserv->end_date = '2022-10-12';
