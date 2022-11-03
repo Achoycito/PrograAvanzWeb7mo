@@ -16,6 +16,7 @@
                 <th>Nombre</th>
                 <th>Correo electronico</th>
                 <th>Numero de telefono</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
                     <td> {{ $client->name }} </td>
                     <td> {{ $client->email }} </td>
                     <td> {{ $client->phone_number }} </td>
+                    <td> <a href="{{ url('/clients/edit/'.$client->id) }}">Editar</a> </td>
                 </tr>
             @endforeach
         </tbody>

@@ -10,17 +10,21 @@
     <h1>Crear un cliente</h1>
     <form action="{{url('/clients/')}}" method="post">
         @csrf
+        @method('PUT')
+        
         <label>Nombre</label>
-        <input type="text" name="name" placeholder="Nombre completo">
+        <input type="text" name="name" placeholder="Nombre completo" value="{{ $client->name }}">
         <br>
 
         <label>Correo electronico</label>
-        <input type="email" name="email" placeholder="ejemplo@gmail.com">
+        <input type="email" name="email" placeholder="ejemplo@gmail.com" value="{{ $client->email }}">
         <br>
 
         <label>Numero de telefono</label>
-        <input type="text" name="phone_number" placeholder="6120000000">
+        <input type="text" name="phone_number" placeholder="6120000000" value="{{ $client->phone_number }}">
         <br>
+        
+        <input type="hidden" name="id" value="{{ $client->id }}">
 
         <button type="submit">Continuar</button>
     </form>
